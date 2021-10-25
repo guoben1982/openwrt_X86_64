@@ -163,9 +163,8 @@ jobs:
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
-        find openwrt/bin/packages/x86_64 -name "*.ipk" | xargs tar czvf ${{ env.FIRMWARE }}/x86-64-IPK.tar.gz
-        echo "下载后务必确认SHA256是否正确！">> release.txt
-                
+        find openwrt/bin/packages/x86_64/helloworld -name "*.ipk" | xargs tar czvf ${{ env.FIRMWARE }}/Helloworld.tar.gz
+                       
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
@@ -186,7 +185,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 3
+        keep_latest: 5
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
